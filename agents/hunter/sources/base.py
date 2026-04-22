@@ -31,4 +31,4 @@ class FourMemeSource(Protocol):
 
     async def events(self) -> AsyncIterator[RawTokenEvent]:
         """Yield events as they arrive."""
-        ...
+        ...  # pragma: no cover - Protocol body, not executed
