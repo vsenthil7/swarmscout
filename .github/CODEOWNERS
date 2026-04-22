@@ -1,0 +1,26 @@
+# GitHub CODEOWNERS — used for automatic review requests.
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Until the team expands, every file is owned by the project lead.
+# Update this file as contributors take ownership of individual surfaces.
+
+# Default: everything
+*                                   @senthil
+
+# Agent surfaces (leave as default until a second contributor joins)
+# /agents/hunter/                   @senthil
+# /agents/social/                   @senthil
+# /agents/chain/                    @senthil
+# /agents/risk/                     @senthil
+# /agents/narrator/                 @senthil
+
+# Smart contracts
+# /contracts/                       @senthil
+
+# Frontend
+# /web/                             @senthil
+
+# CI and infra
+# /.github/                         @senthil
+# /infra/                           @senthil
+# /docker-compose.yml               @senthil

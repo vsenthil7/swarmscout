@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          known_hosts: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+        run: bash scripts/deploy.sh
+
+      - name: Smoke test
+        env:
+          API_URL: ${{ secrets.PUBLIC_API_URL }}
+          DASHBOARD_URL: ${{ secrets.PUBLIC_DASHBOARD_URL }}
+        run: bash scripts/smoke_test.sh
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::deploy workflow failed for tag ${{ github.ref_name }}"

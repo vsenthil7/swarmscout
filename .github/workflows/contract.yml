@@ -1,0 +1,49 @@
+name: Contracts
+
+on:
+  push:
+    branches: [main]
+    paths: ["contracts/**", ".github/workflows/contract.yml"]
+  pull_request:
+    paths: ["contracts/**", ".github/workflows/contract.yml"]
+
+jobs:
+  foundry:
+    name: Foundry build, test, coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Build
+        run: forge build --sizes
+
+      - name: Test
+        run: forge test -vvv
+
+      - name: Coverage
+        run: |
+          forge coverage --report lcov
+          python3 - <<'PY'
+          import re, pathlib, sys
+          lines = pathlib.Path("lcov.info").read_text().splitlines()
+          lf = lh = brf = brh = 0
+          for ln in lines:
+              if ln.startswith("LF:"): lf += int(ln[3:])
+              elif ln.startswith("LH:"): lh += int(ln[3:])
+              elif ln.startswith("BRF:"): brf += int(ln[4:])
+              elif ln.startswith("BRH:"): brh += int(ln[4:])
+          line_pct = 100.0 if lf == 0 else lh * 100.0 / lf
+          branch_pct = 100.0 if brf == 0 else brh * 100.0 / brf
+          print(f"lines={line_pct:.2f}%  branches={branch_pct:.2f}%")
+          if line_pct < 100.0 or branch_pct < 100.0:
+              sys.exit(1)
+          PY
