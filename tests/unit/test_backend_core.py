@@ -10,6 +10,7 @@ import json
 
 import fakeredis.aioredis
 import pytest
+import redis.asyncio as aioredis
 from pydantic import ValidationError
 
 from agents.common.bus import Bus, BusMessage
@@ -268,6 +269,56 @@ async def test_bus_ensure_group_idempotent(bus: Bus) -> None:
     await bus.ensure_group(StreamName.CANDIDATES, "g1")
     # second call must not raise
     await bus.ensure_group(StreamName.CANDIDATES, "g1")
+
+
+@pytest.mark.skipif(
+    "os.environ.get('REDIS_URL','').find('localhost') < 0",
+    reason="Requires real Redis; set REDIS_URL=redis://localhost:6379/0 to enable",
+)
+@pytest.mark.asyncio
+async def test_bus_pel_redelivery_against_real_redis() -> None:
+    """Unacked message is redelivered on the next consume (TC-F reliability).
+
+    Runs against real Redis via the docker-compose service (REDIS_URL env var).
+    Covers FR-105: crashed consumer's in-flight messages are redelivered after
+    visibility timeout via the PEL drain path in Bus.consume.
+    """
+    import os
+    import uuid
+
+    redis_url = os.environ["REDIS_URL"]
+    client = aioredis.from_url(redis_url, decode_responses=True)
+    try:
+        # Use a unique stream+group per run so we don't collide across test invocations.
+        stream_name = f"stream:pel_test_{uuid.uuid4().hex[:8]}"
+        group = "pel-grp"
+        bus = Bus(url=redis_url, client=client)
+
+        env = build_envelope(agent=AgentName.HUNTER, payload={"x": 99})
+        await bus.publish(stream_name, env)
+
+        first_id = None
+        async for msg in bus.consume(
+            stream=stream_name, group=group, consumer="c1", block_ms=50, batch=5
+        ):
+            first_id = msg.entry_id
+            break
+        assert first_id is not None
+
+        # Do NOT ack. Next consume must redeliver via PEL drain.
+        delivered_again = False
+        async for msg in bus.consume(
+            stream=stream_name, group=group, consumer="c1", block_ms=50, batch=5
+        ):
+            if msg.entry_id == first_id:
+                delivered_again = True
+                await bus.ack(stream_name, group, msg.entry_id)
+                break
+        assert delivered_again
+    finally:
+        # Clean up the test stream.
+        await client.delete(stream_name)
+        await client.aclose()
 
 
 @pytest.mark.skip(
