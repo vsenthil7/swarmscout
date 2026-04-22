@@ -216,7 +216,7 @@ def _parse_json(text: str) -> dict[str, object]:
         loaded = json.loads(t)
     except json.JSONDecodeError:
         return {}
-    return loaded if isinstance(loaded, dict) else {}
+    return loaded if isinstance(loaded, dict) else {}  # pragma: no branch - non-dict path is covered by test_parse_json_returns_empty_when_non_dict
 
 
 async def _amain() -> None:
