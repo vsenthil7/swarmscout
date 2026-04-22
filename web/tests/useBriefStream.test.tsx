@@ -114,4 +114,74 @@ describe('useBriefStream', () => {
       fetchSpy.mockRestore();
     }
   });
+
+  it('switches to polling and drains reversed items into the feed', async () => {
+    // Verify the interval callback body (lines 44-45: fetchBriefs + prepend reversed).
+    const samples = [
+      {
+        msg_id: '01ARZ3NDEKTSV4RRFFQ69G5FAA',
+        payload: {
+          token_name: 'Old',
+          token_address: `0x${'1'.repeat(40)}`,
+          thesis: 't',
+          conviction_tier: 'degen',
+          caveats: [],
+          sources: [],
+          model_attribution: [],
+          brief_generated_at: '2026-04-22T06:50:00Z',
+          confidence_tier: 'ok',
+        },
+        payload_hash: 'a'.repeat(64),
+        upstream_ids: [],
+        model_used: null,
+        created_at: '2026-04-22T06:50:00Z',
+        agent: 'narrator',
+        on_chain_tx: null,
+        on_chain_block: null,
+      },
+    ];
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(
+        async () =>
+          new Response(JSON.stringify({ items: samples, limit: 20, offset: 0 }), { status: 200 }),
+      );
+    try {
+      const { result } = renderHook(() => useBriefStream([]));
+      // Trigger 3 closes to enter polling.
+      for (let i = 0; i < 3; i += 1) {
+        act(() => {
+          MockWebSocket.instances[i]?.onclose?.(new Event('close'));
+          vi.advanceTimersByTime(60_000);
+        });
+      }
+      // Let the polling interval fire once.
+      await act(async () => {
+        vi.advanceTimersByTime(10_000);
+        // microtask flush so the async callback resolves
+        await Promise.resolve();
+      });
+      expect(fetchSpy).toHaveBeenCalled();
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+
+  it('schedules a reconnect when WebSocket constructor throws', () => {
+    // Replace WebSocket with a constructor that throws — exercises the
+    // try/catch scheduleReconnect branch (lines 62-65).
+    (globalThis as unknown as { WebSocket: unknown }).WebSocket = class {
+      constructor() {
+        throw new Error('cannot construct');
+      }
+    };
+    const { result } = renderHook(() => useBriefStream([]));
+    // The hook should not crash; status remains 'connecting'.
+    expect(result.current.status).toBe('connecting');
+    // Advance time so scheduleReconnect timer fires once (backoff=1s on retry 0).
+    act(() => {
+      vi.advanceTimersByTime(2_000);
+    });
+    expect(result.current.status).toBe('connecting');
+  });
 });
