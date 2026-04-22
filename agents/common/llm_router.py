@@ -82,17 +82,19 @@ class LLMResponse:
 # Approximate prices per 1K tokens (USD). Values drift — we keep them
 # conservative and configurable via the ``pricing`` constructor argument.
 DEFAULT_PRICING: dict[str, tuple[float, float]] = {
-    "anthropic/claude-opus-4-7":    (15.00, 75.00),
-    "anthropic/claude-sonnet-4-6":  (3.00,  15.00),
-    "anthropic/claude-haiku-4-5":   (0.80,  4.00),
-    "openai/gpt-4o":                (2.50,  10.00),
-    "openai/gpt-4o-mini":           (0.15,  0.60),
-    "google/gemini-2.5-pro":        (1.25,  5.00),
-    "google/gemini-2.5-flash":      (0.075, 0.30),
+    "anthropic/claude-opus-4-7": (15.00, 75.00),
+    "anthropic/claude-sonnet-4-6": (3.00, 15.00),
+    "anthropic/claude-haiku-4-5": (0.80, 4.00),
+    "openai/gpt-4o": (2.50, 10.00),
+    "openai/gpt-4o-mini": (0.15, 0.60),
+    "google/gemini-2.5-pro": (1.25, 5.00),
+    "google/gemini-2.5-flash": (0.075, 0.30),
 }
 
 
-def _cost_usd(model: str, input_tokens: int, output_tokens: int, pricing: dict[str, tuple[float, float]]) -> float:
+def _cost_usd(
+    model: str, input_tokens: int, output_tokens: int, pricing: dict[str, tuple[float, float]]
+) -> float:
     """Approximate dollar cost for this call."""
     price_in, price_out = pricing.get(model, (0.0, 0.0))
     return (input_tokens / 1000.0) * price_in + (output_tokens / 1000.0) * price_out
@@ -164,7 +166,9 @@ class _HTTPProvider:
         await self._http.aclose()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=0.5, max=4))
-    async def _post(self, path: str, payload: dict[str, Any], headers: dict[str, str]) -> httpx.Response:
+    async def _post(
+        self, path: str, payload: dict[str, Any], headers: dict[str, str]
+    ) -> httpx.Response:
         """POST helper shared by every _HTTPProvider.
 
         Retries on transient failures with exponential backoff (tenacity)

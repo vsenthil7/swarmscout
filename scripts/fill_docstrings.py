@@ -156,9 +156,7 @@ DOCS: dict[tuple[str, str], str] = {
     ("agents/narrator/main.py", "_process"): (
         "Dispatch a RiskVerdict to either brief narration or human-review emission."
     ),
-    ("agents/narrator/main.py", "_amain"): (
-        "Async process entrypoint for the Narrator agent."
-    ),
+    ("agents/narrator/main.py", "_amain"): ("Async process entrypoint for the Narrator agent."),
     # ====================== agents/risk/main.py ======================
     ("agents/risk/main.py", "__init__"): (
         "Initialise the Risk agent with an empty pending-pair buffer."
@@ -180,9 +178,7 @@ DOCS: dict[tuple[str, str], str] = {
     ("agents/risk/main.py", "_emit_partial"): (
         "Emit a degraded RiskVerdict when the join window expired without a partner."
     ),
-    ("agents/risk/main.py", "_amain"): (
-        "Async process entrypoint for the Risk agent."
-    ),
+    ("agents/risk/main.py", "_amain"): ("Async process entrypoint for the Risk agent."),
     # ====================== agents/social/main.py ======================
     ("agents/social/main.py", "__init__"): (
         "Build a SocialAgent.\n\n"
@@ -210,9 +206,7 @@ DOCS: dict[tuple[str, str], str] = {
         "Hold Playwright handles; the real browser opens in ``start()``."
     ),
     # ====================== api/main.py ======================
-    ("api/main.py", "__init__"): (
-        "Install the middleware with the per-minute capacity."
-    ),
+    ("api/main.py", "__init__"): ("Install the middleware with the per-minute capacity."),
     ("api/main.py", "dispatch"): (
         "Increment the per-IP counter in Redis; reject with 429 on overflow.\n\n"
         "The counter window is one minute (EXPIRE is set on first INCR).\n"
@@ -224,7 +218,6 @@ DOCS: dict[tuple[str, str], str] = {
         "Runs the aiogram dispatcher and the brief-delivery loop concurrently,\n"
         "tearing both down on SIGINT."
     ),
-
     # ====================== tests/integration/test_api.py ======================
     ("tests/integration/test_api.py", "class _Row"): (
         "Minimal standalone mirror of ``db.FindingRow`` for tests."
@@ -259,9 +252,7 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/integration/test_api.py", "test_health_ok"): (
         "``GET /health`` surfaces the fake heartbeat."
     ),
-    ("tests/integration/test_api.py", "test_ready"): (
-        "``GET /ready`` is unconditionally 200."
-    ),
+    ("tests/integration/test_api.py", "test_ready"): ("``GET /ready`` is unconditionally 200."),
     ("tests/integration/test_api.py", "test_metrics"): (
         "``GET /metrics`` returns Prometheus exposition-format text."
     ),
@@ -277,16 +268,13 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/integration/test_api.py", "get"): (
         "Return the baked row if msg_id matches, else None."
     ),
-    ("tests/integration/test_api.py", "all"): (
-        "Return a single online hunter heartbeat."
-    ),
+    ("tests/integration/test_api.py", "all"): ("Return a single online hunter heartbeat."),
     ("tests/integration/test_api.py", "verify"): (
         "Always return None — no records in the fake anchor."
     ),
     ("tests/integration/test_api.py", "fake_lifespan"): (
         "Replacement lifespan that wires fake state instead of real dependencies."
     ),
-
     # ====================== tests/unit/test_agents.py ======================
     ("tests/unit/test_agents.py", "class _FakeResp"): (
         "Stand-in for ``httpx.Response`` used by the polling-source tests."
@@ -294,18 +282,12 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_agents.py", "class _FakeHTTP"): (
         "Stand-in for an ``httpx.AsyncClient`` that always returns a pre-baked body."
     ),
-    ("tests/unit/test_agents.py", "__init__"): (
-        "Hold the body and status; no side effects."
-    ),
+    ("tests/unit/test_agents.py", "__init__"): ("Hold the body and status; no side effects."),
     ("tests/unit/test_agents.py", "raise_for_status"): (
         "Raise an httpx.HTTPStatusError if the baked status is >=400."
     ),
-    ("tests/unit/test_agents.py", "json"): (
-        "Return the baked body verbatim."
-    ),
-    ("tests/unit/test_agents.py", "get"): (
-        "Ignore URL and return the fake response."
-    ),
+    ("tests/unit/test_agents.py", "json"): ("Return the baked body verbatim."),
+    ("tests/unit/test_agents.py", "get"): ("Ignore URL and return the fake response."),
     ("tests/unit/test_agents.py", "test_polling_map_item_happy"): (
         "A well-formed item maps cleanly to a RawTokenEvent."
     ),
@@ -348,9 +330,7 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_agents.py", "test_parse_json_fenced"): (
         "```json fenced content parses after stripping."
     ),
-    ("tests/unit/test_agents.py", "test_parse_json_plain"): (
-        "Unfenced JSON parses directly."
-    ),
+    ("tests/unit/test_agents.py", "test_parse_json_plain"): ("Unfenced JSON parses directly."),
     ("tests/unit/test_agents.py", "test_parse_json_invalid_returns_empty"): (
         "Malformed JSON returns {} rather than raising."
     ),
@@ -363,7 +343,6 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_agents.py", "test_strip_fences_plain_passthrough"): (
         "Text without fences is returned unchanged."
     ),
-
     # ====================== tests/unit/test_backend_core.py ======================
     ("tests/unit/test_backend_core.py", "_make_payload"): (
         "Small payload dict reused across envelope tests."
@@ -458,7 +437,6 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_backend_core.py", "test_envelope_round_trips_through_json"): (
         "Envelope -> JSON -> Envelope preserves msg_id, payload_hash, and payload."
     ),
-
     # ====================== tests/unit/test_bot.py ======================
     ("tests/unit/test_bot.py", "test_passes_threshold_exact_match"): (
         "A brief at the exact user threshold passes."
@@ -475,7 +453,6 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_bot.py", "test_format_brief_has_bscscan_link"): (
         "Rendered brief body contains BscScan, conviction tier, and caveats."
     ),
-
     # ====================== tests/unit/test_hasher.py ======================
     ("tests/unit/test_hasher.py", "test_canonical_json_is_deterministic"): (
         "Same-content dicts in different insertion orders produce identical bytes."
@@ -507,20 +484,15 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_hasher.py", "test_roundtrip_identity"): (
         "dumps -> loads -> hash_payload yields the same hash as hashing the original."
     ),
-
     # ====================== tests/unit/test_llm_router.py ======================
-    ("tests/unit/test_llm_router.py", "__init__"): (
-        "Start with an empty call log."
-    ),
+    ("tests/unit/test_llm_router.py", "__init__"): ("Start with an empty call log."),
     ("tests/unit/test_llm_router.py", "log"): (
         "Capture the call kwargs verbatim so test assertions can inspect them."
     ),
     ("tests/unit/test_llm_router.py", "chat"): (
         "Return a canned success response, or raise ProviderError up to ``raise_times``."
     ),
-    ("tests/unit/test_llm_router.py", "audit"): (
-        "Fresh in-memory audit log per test."
-    ),
+    ("tests/unit/test_llm_router.py", "audit"): ("Fresh in-memory audit log per test."),
     ("tests/unit/test_llm_router.py", "bucket"): (
         "TokenBucket capacity 10/minute bound to fakeredis."
     ),
@@ -554,7 +526,6 @@ DOCS: dict[tuple[str, str], str] = {
     ("tests/unit/test_llm_router.py", "test_cost_computed"): (
         "cost_usd is computed from the pricing table and surfaced on LLMResponse."
     ),
-
     # ====================== tests/unit/test_risk_heuristics.py ======================
     ("tests/unit/test_risk_heuristics.py", "_chain"): (
         "Build a ChainMetrics with safe defaults, override via kwargs per test."
@@ -629,7 +600,9 @@ def insert_docstrings(filepath: Path) -> tuple[int, int]:
     """Parse ``filepath``, insert every matching docstring from DOCS, return (added, skipped)."""
     src = filepath.read_text()
     tree = ast.parse(src)
-    inserts: list[tuple[int, int, str, str]] = []  # (body_start_lineno, body_start_col, docstring, target_name)
+    inserts: list[
+        tuple[int, int, str, str]
+    ] = []  # (body_start_lineno, body_start_col, docstring, target_name)
 
     file_key = str(filepath).replace("\\", "/")
 

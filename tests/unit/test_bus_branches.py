@@ -55,6 +55,7 @@ async def test_bus_consume_new_message_branch_and_empty_tick() -> None:
         # Second call: return one entry.
         env = build_envelope(agent=AgentName.HUNTER, payload={"x": 1})
         from agents.common.hasher import canonical_json
+
         body = canonical_json(env.model_dump(mode="json")).decode("utf-8")
         return [(StreamName.CANDIDATES.value, [("1-0", {"envelope": body})])]
 
@@ -132,7 +133,12 @@ async def test_bus_consume_drains_pel_and_iterates_multiple_entries_fully() -> N
         # PEL drain pass: return two entries so the inner for-loop iterates twice.
         if list(streams.values()) == ["0"] and not state["pel_called"]:
             state["pel_called"] = True
-            return [(StreamName.CANDIDATES.value, [("1-0", {"envelope": body1}), ("1-1", {"envelope": body2})])]
+            return [
+                (
+                    StreamName.CANDIDATES.value,
+                    [("1-0", {"envelope": body1}), ("1-1", {"envelope": body2})],
+                )
+            ]
         # Subsequent passes: new-message branch, return another entry to exit.
         if list(streams.values()) == [">"]:
             state["new_called"] += 1

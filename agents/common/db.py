@@ -292,9 +292,7 @@ class SubscriptionRepository:
 
     async def list_active(self) -> list[tuple[int, str]]:
         """Return list of (chat_id, threshold) for active subscribers."""
-        stmt = text(
-            "SELECT chat_id, threshold FROM telegram_subscriptions WHERE active = TRUE"
-        )
+        stmt = text("SELECT chat_id, threshold FROM telegram_subscriptions WHERE active = TRUE")
         async with self._db.session() as s:
             rows = (await s.execute(stmt)).mappings().all()
         return [(int(r["chat_id"]), str(r["threshold"])) for r in rows]

@@ -355,7 +355,9 @@ async def test_bus_pel_redelivery(fake_redis: fakeredis.aioredis.FakeRedis, bus:
 
 
 @pytest.mark.asyncio
-async def test_bus_decodes_valid_envelope_field(bus: Bus, fake_redis: fakeredis.aioredis.FakeRedis) -> None:
+async def test_bus_decodes_valid_envelope_field(
+    bus: Bus, fake_redis: fakeredis.aioredis.FakeRedis
+) -> None:
     # Write a malformed entry directly; consuming should raise.
     """A stream entry missing the ``envelope`` field raises ValueError on consume."""
     await fake_redis.xadd(StreamName.CANDIDATES.value, {"not_envelope": "oops"})

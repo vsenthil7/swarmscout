@@ -1,9 +1,9 @@
 'use client';
 
-import clsx from 'clsx';
-import { BriefCard } from './BriefCard';
 import { useBriefStream } from '@/lib/hooks/useBriefStream';
 import type { Brief } from '@/lib/schemas/brief';
+import clsx from 'clsx';
+import { BriefCard } from './BriefCard';
 
 /**
  * Client-side WebSocket status strip above the feed.

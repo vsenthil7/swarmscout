@@ -27,8 +27,8 @@ export function ActivityTimelinePanel({ briefs }: { briefs: Brief[] }) {
       <div className="flex h-16 items-end gap-0.5" aria-label="briefs per hour">
         {buckets.map((n, i) => (
           <div
-            // eslint-disable-next-line react/no-array-index-key
-            key={i}
+            // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length 24-bucket array; index IS the hour
+            key={`hour-bucket-${i}`}
             className="flex-1 rounded-t bg-accent/70"
             style={{ height: `${(n / max) * 100}%` }}
             title={`${n} briefs`}

@@ -52,7 +52,9 @@ class _FakePubSub:
     async def unsubscribe(self, channel: str) -> None:
         self.unsubscribed.append(channel)
 
-    async def get_message(self, *, ignore_subscribe_messages: bool = True, timeout: float = 1.0) -> Any:
+    async def get_message(
+        self, *, ignore_subscribe_messages: bool = True, timeout: float = 1.0
+    ) -> Any:
         # ignore the kwargs, they are for real redis.
         _ = (ignore_subscribe_messages, timeout)
         if self._scripted:
@@ -114,7 +116,7 @@ def test_ws_hello_frame_and_bytes_message_and_normal_disconnect() -> None:
         assert json.loads(hello) == {"type": "hello"}
         frame = ws.receive_text()
         assert frame == "hello-world"
-            # Client disconnects normally by exiting the `with` block.
+        # Client disconnects normally by exiting the `with` block.
     assert "pubsub:briefs" in pubsub.subscribed
     assert "pubsub:briefs" in pubsub.unsubscribed
     assert pubsub.closed is True
@@ -188,7 +190,9 @@ def test_ws_none_tick_skips_without_sending() -> None:
 
 def test_ws_handles_unexpected_exception_in_pubsub_loop() -> None:
     class _BoomPubSub(_FakePubSub):
-        async def get_message(self, *, ignore_subscribe_messages: bool = True, timeout: float = 1.0) -> Any:
+        async def get_message(
+            self, *, ignore_subscribe_messages: bool = True, timeout: float = 1.0
+        ) -> Any:
             raise RuntimeError("boom")
 
     class _FakeWS:

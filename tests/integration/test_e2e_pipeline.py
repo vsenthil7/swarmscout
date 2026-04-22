@@ -108,9 +108,7 @@ async def test_e2e_candidate_to_brief_chain() -> None:
             initial_liquidity_usd=5_000.0,
             source_url="https://four.meme/test",
         )
-        hunter_env = build_envelope(
-            agent=AgentName.HUNTER, payload=candidate, model_used=None
-        )
+        hunter_env = build_envelope(agent=AgentName.HUNTER, payload=candidate, model_used=None)
         await bus.publish(StreamName.CANDIDATES, hunter_env)
 
         # --- Social: emit a SocialScore downstream ------------------------ #

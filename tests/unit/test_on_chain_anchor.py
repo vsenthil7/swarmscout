@@ -58,11 +58,14 @@ def _make_fake_w3() -> MagicMock:
 
 class _Awaitable:
     """Minimal awaitable wrapper that resolves to a fixed value."""
+
     def __init__(self, value: Any) -> None:
         self._value = value
+
     def __await__(self):  # type: ignore[no-untyped-def]
         async def _inner() -> Any:
             return self._value
+
         return _inner().__await__()
 
 
@@ -205,8 +208,10 @@ def test_onchain_anchor_constructs_with_default_w3_when_not_provided() -> None:
     """
     from agents.common import on_chain as on_chain_mod
 
-    with patch.object(on_chain_mod, "AsyncWeb3") as mock_w3_cls, \
-         patch.object(on_chain_mod, "AsyncHTTPProvider") as mock_provider:
+    with (
+        patch.object(on_chain_mod, "AsyncWeb3") as mock_w3_cls,
+        patch.object(on_chain_mod, "AsyncHTTPProvider") as mock_provider,
+    ):
         fake_instance = MagicMock()
         fake_eth = MagicMock()
         fake_eth.contract = MagicMock(return_value=MagicMock())

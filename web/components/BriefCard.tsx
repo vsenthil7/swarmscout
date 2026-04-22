@@ -1,7 +1,7 @@
+import { bscscanTokenUrl, verifyUrl } from '@/lib/api';
+import type { Brief } from '@/lib/schemas/brief';
 import clsx from 'clsx';
 import { ExternalLink, ShieldCheck } from 'lucide-react';
-import type { Brief } from '@/lib/schemas/brief';
-import { bscscanTokenUrl, verifyUrl } from '@/lib/api';
 
 const TIER_COLORS: Record<Brief['payload']['conviction_tier'], string> = {
   high: 'bg-success/15 text-success border-success/30',
@@ -47,9 +47,8 @@ export function BriefCard({ brief }: { brief: Brief }) {
           <p className="mb-1 font-medium text-slate-300">Caveats</p>
           <ul className="list-disc space-y-0.5 pl-4">
             {p.caveats.slice(0, 5).map((c, i) => (
-              // The caveat list is stable for a given brief — the index key is safe here.
-              // eslint-disable-next-line react/no-array-index-key
-              <li key={i}>{c}</li>
+              // biome-ignore lint/suspicious/noArrayIndexKey: caveat list is stable for a given immutable brief
+              <li key={`caveat-${brief.msg_id}-${i}`}>{c}</li>
             ))}
           </ul>
         </div>

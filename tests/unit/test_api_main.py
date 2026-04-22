@@ -42,8 +42,10 @@ def test_run_entrypoint_invokes_uvicorn_with_expected_args() -> None:
 
     fake_settings = SimpleNamespace(env="development", api_rate_limit_per_minute=60)
 
-    with patch.object(api_main, "get_settings", return_value=fake_settings), \
-         patch.object(api_main, "uvicorn") as mock_uvicorn:
+    with (
+        patch.object(api_main, "get_settings", return_value=fake_settings),
+        patch.object(api_main, "uvicorn") as mock_uvicorn,
+    ):
         api_main.run()
 
     mock_uvicorn.run.assert_called_once()
@@ -60,8 +62,10 @@ def test_run_entrypoint_reload_false_when_env_not_development() -> None:
 
     fake_settings = SimpleNamespace(env="production", api_rate_limit_per_minute=60)
 
-    with patch.object(api_main, "get_settings", return_value=fake_settings), \
-         patch.object(api_main, "uvicorn") as mock_uvicorn:
+    with (
+        patch.object(api_main, "get_settings", return_value=fake_settings),
+        patch.object(api_main, "uvicorn") as mock_uvicorn,
+    ):
         api_main.run()
 
     _, kwargs = mock_uvicorn.run.call_args

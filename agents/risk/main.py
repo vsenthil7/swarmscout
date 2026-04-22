@@ -153,7 +153,9 @@ class RiskAgent(BaseAgent):
                 try:
                     await self._emit_partial(pair)
                 except Exception:
-                    self.log.exception("risk_partial_emit_failed", token=pair.envelope.payload.get("token_address"))
+                    self.log.exception(
+                        "risk_partial_emit_failed", token=pair.envelope.payload.get("token_address")
+                    )
 
     async def _emit_verdict(self, *, social_env: Envelope, chain_env: Envelope) -> None:
         """Compute heuristics, ask LLM for rationale, publish RiskVerdict on stream:risk."""
@@ -213,7 +215,9 @@ class RiskAgent(BaseAgent):
             {
                 "social": s.model_dump(mode="json"),
                 "chain": c.model_dump(mode="json"),
-                "findings": [{"tag": f.tag, "weight": f.weight, "reason": f.reason} for f in findings],
+                "findings": [
+                    {"tag": f.tag, "weight": f.weight, "reason": f.reason} for f in findings
+                ],
                 "preliminary_score": score,
             }
         )
@@ -238,9 +242,17 @@ class RiskAgent(BaseAgent):
             conf_raw = str(data.get("confidence", "medium")).lower()
             if conf_raw not in {c.value for c in RiskConfidence}:
                 conf_raw = "medium"
-            return rationale, f"{resp.provider}/{resp.model.split('/', 1)[-1]}", RiskConfidence(conf_raw)
+            return (
+                rationale,
+                f"{resp.provider}/{resp.model.split('/', 1)[-1]}",
+                RiskConfidence(conf_raw),
+            )
         except json.JSONDecodeError:
-            return resp.content[:400], f"{resp.provider}/{resp.model.split('/', 1)[-1]}", RiskConfidence.LOW
+            return (
+                resp.content[:400],
+                f"{resp.provider}/{resp.model.split('/', 1)[-1]}",
+                RiskConfidence.LOW,
+            )
 
 
 def _strip_fences(text: str) -> str:

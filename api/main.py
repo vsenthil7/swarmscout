@@ -50,8 +50,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if count == 1:
             await redis.expire(key, 60)
         if count > self._capacity:
-            return Response(content='{"detail":"rate limit exceeded"}', status_code=429,
-                            media_type="application/json")
+            return Response(
+                content='{"detail":"rate limit exceeded"}',
+                status_code=429,
+                media_type="application/json",
+            )
         return await call_next(request)
 
 

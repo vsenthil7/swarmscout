@@ -17,6 +17,7 @@ from api.main import create_app
 @dataclass
 class _Row:
     """Minimal standalone mirror of ``db.FindingRow`` for tests."""
+
     msg_id: str
     agent: str
     payload_hash: str
@@ -30,6 +31,7 @@ class _Row:
 
 class _FakeFindings:
     """In-memory stand-in for ``FindingsRepository`` — returns one pre-baked row."""
+
     def __init__(self) -> None:
         """Bake one Brief row with its hash already computed."""
         payload = {
@@ -66,6 +68,7 @@ class _FakeFindings:
 
 class _FakeHeartbeats:
     """In-memory stand-in for ``HeartbeatRepository`` — returns one online agent."""
+
     async def all(self) -> list[dict[str, object]]:
         """Return a single online hunter heartbeat."""
         return [
@@ -82,6 +85,7 @@ class _FakeHeartbeats:
 
 class _FakeAnchor:
     """In-memory stand-in for the on-chain anchor — ``verify()`` always None."""
+
     async def verify(self, msg_id: str) -> None:
         """Always return None — no records in the fake anchor."""
         return None

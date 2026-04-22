@@ -79,7 +79,11 @@ def _build_router(
         if settings.dgrid_api_key
         else None
     )
-    anthropic = AnthropicProvider(settings.anthropic_api_key, http=http) if settings.anthropic_api_key else None
+    anthropic = (
+        AnthropicProvider(settings.anthropic_api_key, http=http)
+        if settings.anthropic_api_key
+        else None
+    )
     openai = OpenAIProvider(settings.openai_api_key, http=http) if settings.openai_api_key else None
     google = GoogleProvider(settings.google_api_key, http=http) if settings.google_api_key else None
     bucket = TokenBucket(redis, capacity=60, period_s=60)

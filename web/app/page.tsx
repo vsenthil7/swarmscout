@@ -1,8 +1,8 @@
-import { BriefCard } from '@/components/BriefCard';
-import { SwarmHealthPanel } from '@/components/SwarmHealthPanel';
-import { ModelUsagePanel } from '@/components/ModelUsagePanel';
 import { ActivityTimelinePanel } from '@/components/ActivityTimelinePanel';
+import { BriefCard } from '@/components/BriefCard';
 import { FeedStream } from '@/components/FeedStream';
+import { ModelUsagePanel } from '@/components/ModelUsagePanel';
+import { SwarmHealthPanel } from '@/components/SwarmHealthPanel';
 import { fetchBriefs, fetchHealth } from '@/lib/api';
 
 /** Next.js route segment config — always render fresh at request time (no ISR caching). */

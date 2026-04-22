@@ -1,3 +1,5 @@
+import { useBriefStream } from '@/lib/hooks/useBriefStream';
+import { act, renderHook, waitFor } from '@testing-library/react';
 /**
  * Tests for the `useBriefStream` hook.
  *
@@ -5,9 +7,7 @@
  * onopen/onmessage/onclose callbacks so the test can drive the hook
  * through each state transition (connecting -> open -> closed -> polling).
  */
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { useBriefStream } from '@/lib/hooks/useBriefStream';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];
@@ -59,7 +59,7 @@ describe('useBriefStream', () => {
           msg_id: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
           payload: {
             token_name: 'A',
-            token_address: '0x' + '0'.repeat(40),
+            token_address: `0x${'0'.repeat(40)}`,
             thesis: 't',
             conviction_tier: 'degen',
             caveats: [],
@@ -94,9 +94,12 @@ describe('useBriefStream', () => {
   it('falls back to polling after repeated failures', async () => {
     // Mock fetch so the polling fallback doesn't hit a real network endpoint.
     // Use a factory so each call gets a fresh Response (bodies are one-shot).
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async () =>
-      new Response(JSON.stringify({ items: [], limit: 20, offset: 0 }), { status: 200 }),
-    );
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(
+        async () =>
+          new Response(JSON.stringify({ items: [], limit: 20, offset: 0 }), { status: 200 }),
+      );
     try {
       const { result } = renderHook(() => useBriefStream([]));
       for (let i = 0; i < 3; i += 1) {

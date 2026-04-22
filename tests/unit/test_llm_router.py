@@ -126,9 +126,7 @@ async def test_router_falls_back_on_dgrid_failure(
 
 # TC-U22 — DGrid circuit breaker trips after 3 failures
 @pytest.mark.asyncio
-async def test_router_circuit_breaker_trips(
-    audit: _FakeLLMCallRepo, bucket: TokenBucket
-) -> None:
+async def test_router_circuit_breaker_trips(audit: _FakeLLMCallRepo, bucket: TokenBucket) -> None:
     """After 3 consecutive DGrid failures, _dgrid_available flips to False."""
     dgrid = _FakeProvider(name="dgrid", raise_times=99)
     anthropic = _FakeProvider(name="anthropic", response_text="claude")

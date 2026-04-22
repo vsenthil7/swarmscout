@@ -124,8 +124,8 @@ class ChainAgent(BaseAgent):
         whales = _whale_count(transfers, threshold_usd=1000.0)
 
         honeypot_ok = meta.verified  # surrogate: verified contracts rarely honeypot; real check
-                                     # uses an external service in production.
-        lp_locked = False            # supplied later by a locker-contract lookup.
+        # uses an external service in production.
+        lp_locked = False  # supplied later by a locker-contract lookup.
 
         return ChainMetrics(
             token_address=c.token_address,

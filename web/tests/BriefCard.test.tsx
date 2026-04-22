@@ -1,3 +1,6 @@
+import { BriefCard } from '@/components/BriefCard';
+import type { Brief } from '@/lib/schemas/brief';
+import { render, screen } from '@testing-library/react';
 /**
  * Unit tests for BriefCard (TC-U100..U109).
  *
@@ -7,9 +10,6 @@
  * spread over it to vary one field at a time.
  */
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { BriefCard } from '@/components/BriefCard';
-import type { Brief } from '@/lib/schemas/brief';
 
 const sample: Brief = {
   msg_id: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
@@ -28,7 +28,7 @@ const sample: Brief = {
   upstream_ids: [],
   model_used: 'anthropic/claude-opus-4-7',
   created_at: '2026-04-22T06:50:00Z',
-  on_chain_tx: '0x' + 'b'.repeat(64),
+  on_chain_tx: `0x${'b'.repeat(64)}`,
   on_chain_block: 12345,
 };
 

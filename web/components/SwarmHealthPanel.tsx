@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import type { AgentHeartbeat, Brief } from '@/lib/schemas/brief';
+import clsx from 'clsx';
 
 /**
  * Sidebar panel showing per-agent heartbeat status plus a top-level status dot.
@@ -22,17 +22,12 @@ export function SwarmHealthPanel({
           Swarm health
         </h3>
         <span
-          className={clsx(
-            'h-2 w-2 rounded-full',
-            status === 'ok' ? 'bg-success' : 'bg-warn',
-          )}
+          className={clsx('h-2 w-2 rounded-full', status === 'ok' ? 'bg-success' : 'bg-warn')}
           aria-label={`status: ${status}`}
         />
       </div>
       <ul className="space-y-1.5">
-        {agents.length === 0 && (
-          <li className="text-xs text-slate-500">No heartbeats yet.</li>
-        )}
+        {agents.length === 0 && <li className="text-xs text-slate-500">No heartbeats yet.</li>}
         {agents.map((a) => (
           <li
             key={a.agent}

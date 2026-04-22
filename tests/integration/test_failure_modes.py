@@ -229,7 +229,9 @@ async def test_tcf03_bus_publish_failure_propagates() -> None:
 
 
 @pytest.mark.asyncio
-async def test_tcf04_risk_join_timeout_emits_partial_verdict(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_tcf04_risk_join_timeout_emits_partial_verdict(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """If only one side of a Risk pair arrives, a partial verdict is emitted after the timeout.
 
     We short-circuit the 120s window via monkeypatch to keep the test

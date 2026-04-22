@@ -129,9 +129,7 @@ def rule_bot_shilling(s: SocialScore, c: ChainMetrics) -> list[Finding]:
 def rule_paid_promotion(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Social agent flagged paid promotion."""
     if "paid-promotion-disclosure" in s.red_flags:
-        return [
-            Finding("paid-promotion-disclosure", 5, "Social agent flagged paid promotion.")
-        ]
+        return [Finding("paid-promotion-disclosure", 5, "Social agent flagged paid promotion.")]
     return []
 
 

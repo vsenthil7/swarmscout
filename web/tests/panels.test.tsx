@@ -1,3 +1,17 @@
+import { ActivityTimelinePanel } from '@/components/ActivityTimelinePanel';
+import { ModelUsagePanel } from '@/components/ModelUsagePanel';
+import { SwarmHealthPanel } from '@/components/SwarmHealthPanel';
+import {
+  bscscanTokenUrl,
+  bscscanTxUrl,
+  fetchBrief,
+  fetchBriefs,
+  fetchHealth,
+  verifyUrl,
+} from '@/lib/api';
+import { agentHeartbeatSchema, briefSchema, healthSchema } from '@/lib/schemas/brief';
+import type { Brief } from '@/lib/schemas/brief';
+import { render, screen } from '@testing-library/react';
 /**
  * Unit tests for the three sidebar panels, zod schemas, and the api.ts helpers.
  *
@@ -6,13 +20,6 @@
  * partial argument.
  */
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { SwarmHealthPanel } from '@/components/SwarmHealthPanel';
-import { ModelUsagePanel } from '@/components/ModelUsagePanel';
-import { ActivityTimelinePanel } from '@/components/ActivityTimelinePanel';
-import { briefSchema, healthSchema, agentHeartbeatSchema } from '@/lib/schemas/brief';
-import type { Brief } from '@/lib/schemas/brief';
-import { fetchBriefs, fetchBrief, fetchHealth, bscscanTokenUrl, bscscanTxUrl, verifyUrl } from '@/lib/api';
 
 const brief = (partial: Partial<Brief> = {}): Brief => ({
   msg_id: partial.msg_id ?? '01ARZ3NDEKTSV4RRFFQ69G5FAV',

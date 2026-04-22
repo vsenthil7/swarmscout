@@ -93,8 +93,16 @@ class FourMemeRPCLogSource:
             _data = entry.get("data", "")  # reserved for future decoding of non-indexed fields
             if not isinstance(topics, list) or len(topics) < 3:
                 return None
-            token_addr = "0x" + bytes(topics[1]).hex()[-40:] if isinstance(topics[1], (bytes, bytearray)) else str(topics[1])[-40:]
-            creator_addr = "0x" + bytes(topics[2]).hex()[-40:] if isinstance(topics[2], (bytes, bytearray)) else str(topics[2])[-40:]
+            token_addr = (
+                "0x" + bytes(topics[1]).hex()[-40:]
+                if isinstance(topics[1], (bytes, bytearray))
+                else str(topics[1])[-40:]
+            )
+            creator_addr = (
+                "0x" + bytes(topics[2]).hex()[-40:]
+                if isinstance(topics[2], (bytes, bytearray))
+                else str(topics[2])[-40:]
+            )
             return RawTokenEvent(
                 token_address=token_addr.lower(),
                 creator_address=creator_addr.lower(),

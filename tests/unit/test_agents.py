@@ -18,6 +18,7 @@ from agents.social.main import _strip_fences
 
 class _FakeResp:
     """Stand-in for ``httpx.Response`` used by the polling-source tests."""
+
     def __init__(self, body: object, status: int = 200) -> None:
         """Hold the body and status; no side effects."""
         self._body = body
@@ -41,6 +42,7 @@ class _FakeResp:
 
 class _FakeHTTP:
     """Stand-in for an ``httpx.AsyncClient`` that always returns a pre-baked body."""
+
     def __init__(self, body: object, status: int = 200) -> None:
         """Hold the body and status; no side effects."""
         self._body = body
@@ -204,7 +206,7 @@ def test_parse_json_non_dict_returns_empty() -> None:
 
 def test_strip_fences_removes_backticks() -> None:
     """```json wrapped content is unwrapped to its inner JSON."""
-    assert _strip_fences("```json\n{\"a\":1}\n```") == '{"a":1}'
+    assert _strip_fences('```json\n{"a":1}\n```') == '{"a":1}'
 
 
 def test_strip_fences_plain_passthrough() -> None:
