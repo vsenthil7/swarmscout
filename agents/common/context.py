@@ -6,9 +6,10 @@ Keeps ``main`` modules in every agent thin: they just pick a subclass of
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import httpx
 import redis.asyncio as aioredis
-from dataclasses import dataclass
 
 from agents.common.bus import Bus
 from agents.common.db import (

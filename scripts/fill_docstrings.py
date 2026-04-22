@@ -11,7 +11,6 @@ docstring we skip it.
 from __future__ import annotations
 
 import ast
-import sys
 from pathlib import Path
 
 # -------------------------------------------------------------------- mapping
@@ -684,7 +683,7 @@ def insert_docstrings(filepath: Path) -> tuple[int, int]:
 
 def main() -> None:
     """Run the docstring inserter across every referenced file."""
-    root = Path(".")
+    root = Path()
     touched_files = sorted({Path(k[0]) for k in DOCS})
     total_added = 0
     for fp in touched_files:

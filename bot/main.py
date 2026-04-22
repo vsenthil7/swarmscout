@@ -16,13 +16,12 @@ window before continuing.
 from __future__ import annotations
 
 import asyncio
-import json
 from contextlib import suppress
 
 from aiogram import Bot, Dispatcher
-from aiogram.exceptions import TelegramRetryAfter
-from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+from aiogram.exceptions import TelegramRetryAfter
 
 from agents.common.bus import BusMessage
 from agents.common.context import Context, build_context
@@ -44,7 +43,7 @@ async def _delivery_loop(ctx: Context, bot: Bot) -> None:
         try:
             await _dispatch_one(ctx, bot, msg)
             await ctx.bus.ack(StreamName.BRIEFS, DELIVERY_GROUP, msg.entry_id)
-        except Exception:  # noqa: BLE001
+        except Exception:
             log.exception("bot_delivery_failed", entry_id=msg.entry_id)
 
 
@@ -74,7 +73,7 @@ async def _dispatch_one(ctx: Context, bot: Bot, msg: BusMessage) -> None:
         except TelegramRetryAfter as err:
             log.warning("telegram_rate_limited", seconds=err.retry_after)
             await asyncio.sleep(err.retry_after + 1)
-        except Exception:  # noqa: BLE001
+        except Exception:
             log.exception("bot_send_failed", chat_id=chat_id, msg_id=msg_id)
 
 

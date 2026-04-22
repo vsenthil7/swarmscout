@@ -70,14 +70,14 @@ class TelegramScraper:
                 for m in messages[-40:]:
                     try:
                         text = await m.inner_text(timeout=1_000)
-                    except Exception:  # noqa: BLE001
+                    except Exception:
                         continue
                     if query.lower() in text.lower():
                         total += 1
                         if len(samples) < 5:
                             samples.append(text.strip()[:280])
                 any_success = True
-            except Exception as err:  # noqa: BLE001
+            except Exception as err:
                 log.warning("telegram_channel_failed", channel=ch, err=str(err))
             finally:
                 await page.close()

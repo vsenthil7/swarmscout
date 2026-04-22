@@ -107,7 +107,7 @@ class RiskAgent(BaseAgent):
                 await self.bus.ack(stream, group, msg.entry_id)
                 self.metrics.events_processed.inc()
                 self._events_in_window += 1
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.metrics.events_failed.inc()
                 self.log.exception("risk_on_message_failed", side=side, entry_id=msg.entry_id)
 
@@ -152,7 +152,7 @@ class RiskAgent(BaseAgent):
             for _, pair in expired:
                 try:
                     await self._emit_partial(pair)
-                except Exception:  # noqa: BLE001
+                except Exception:
                     self.log.exception("risk_partial_emit_failed", token=pair.envelope.payload.get("token_address"))
 
     async def _emit_verdict(self, *, social_env: Envelope, chain_env: Envelope) -> None:

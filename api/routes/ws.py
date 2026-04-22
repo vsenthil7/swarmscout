@@ -39,7 +39,7 @@ async def ws_events(websocket: WebSocket) -> None:
             await websocket.send_text(str(data))
     except WebSocketDisconnect:
         log.info("ws_client_disconnected")
-    except Exception:  # noqa: BLE001
+    except Exception:
         log.exception("ws_error")
     finally:
         await pubsub.unsubscribe("pubsub:briefs")

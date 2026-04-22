@@ -158,13 +158,13 @@ class NullAnchor:
     async def record(
         self,
         *,
-        msg_id: str,  # noqa: ARG002
-        payload_hash_hex: str,  # noqa: ARG002
-        agent: str,  # noqa: ARG002
+        msg_id: str,
+        payload_hash_hex: str,
+        agent: str,
     ) -> tuple[str, int]:
         """Return a deterministic placeholder so callers get predictable shapes."""
         return ("0x" + "0" * 64, 0)
 
-    async def verify(self, msg_id: str) -> OnChainRecord | None:  # noqa: ARG002
+    async def verify(self, msg_id: str) -> OnChainRecord | None:
         """Always return ``None`` — no records exist in the null anchor."""
         return None

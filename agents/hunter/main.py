@@ -11,7 +11,6 @@ always empty.
 from __future__ import annotations
 
 import asyncio
-from typing import cast
 
 from agents.common.base_agent import BaseAgent
 from agents.common.bus import BusMessage

@@ -7,8 +7,6 @@ short-circuit.
 
 from __future__ import annotations
 
-import pytest
-
 from agents.common.schemas.payloads import ChainMetrics, DataQuality, SocialScore
 from agents.risk.heuristics import (
     ALL_RULES,

@@ -16,7 +16,6 @@ from pydantic import ValidationError
 from agents.common.envelope_builder import new_msg_id, now_iso
 from agents.common.schemas.envelope import AgentName, Envelope
 
-
 # --------------------------------------------------------------------------- #
 # agents/common/schemas/envelope.py — line 114 (alphabet branch)              #
 # --------------------------------------------------------------------------- #

@@ -13,7 +13,6 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 import fakeredis.aioredis
-import pytest
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
@@ -110,12 +109,11 @@ def test_ws_hello_frame_and_bytes_message_and_normal_disconnect() -> None:
             {"type": "message", "data": b"hello-world"},  # bytes branch
         ]
     )
-    with _client_with(pubsub) as client:
-        with client.websocket_connect("/ws/events") as ws:
-            hello = ws.receive_text()
-            assert json.loads(hello) == {"type": "hello"}
-            frame = ws.receive_text()
-            assert frame == "hello-world"
+    with _client_with(pubsub) as client, client.websocket_connect("/ws/events") as ws:
+        hello = ws.receive_text()
+        assert json.loads(hello) == {"type": "hello"}
+        frame = ws.receive_text()
+        assert frame == "hello-world"
             # Client disconnects normally by exiting the `with` block.
     assert "pubsub:briefs" in pubsub.subscribed
     assert "pubsub:briefs" in pubsub.unsubscribed
@@ -173,21 +171,19 @@ def test_ws_string_payload_passes_through() -> None:
             {"type": "message", "data": "already-a-string"},  # str branch
         ]
     )
-    with _client_with(pubsub) as client:
-        with client.websocket_connect("/ws/events") as ws:
-            _ = ws.receive_text()  # hello
-            frame = ws.receive_text()
-            assert frame == "already-a-string"
+    with _client_with(pubsub) as client, client.websocket_connect("/ws/events") as ws:
+        _ = ws.receive_text()  # hello
+        frame = ws.receive_text()
+        assert frame == "already-a-string"
 
 
 def test_ws_none_tick_skips_without_sending() -> None:
     """When ``get_message`` returns None the loop continues without pushing."""
     pubsub = _FakePubSub(scripted=[None, {"type": "message", "data": "after-tick"}])
-    with _client_with(pubsub) as client:
-        with client.websocket_connect("/ws/events") as ws:
-            _ = ws.receive_text()  # hello
-            frame = ws.receive_text()
-            assert frame == "after-tick"
+    with _client_with(pubsub) as client, client.websocket_connect("/ws/events") as ws:
+        _ = ws.receive_text()  # hello
+        frame = ws.receive_text()
+        assert frame == "after-tick"
 
 
 def test_ws_handles_unexpected_exception_in_pubsub_loop() -> None:

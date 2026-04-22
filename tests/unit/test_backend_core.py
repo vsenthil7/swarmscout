@@ -35,7 +35,6 @@ from agents.common.schemas.payloads import (
 )
 from agents.common.settings import Settings, get_settings
 
-
 # --------------------------------------------------------------------------- #
 # Envelope (TC-U01-04)                                                        #
 # --------------------------------------------------------------------------- #

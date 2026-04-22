@@ -74,7 +74,7 @@ class ChainAgent(BaseAgent):
                 await self.bus.ack(StreamName.CANDIDATES, CHAIN_GROUP, msg.entry_id)
                 self.metrics.events_processed.inc()
                 self._events_in_window += 1
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.metrics.events_failed.inc()
                 self.log.exception("chain_process_failed", entry_id=msg.entry_id)
 

@@ -27,7 +27,6 @@ from agents.common.schemas.payloads import (
     ConvictionTier,
 )
 
-
 # --------------------------------------------------------------------------- #
 # Fakes                                                                       #
 # --------------------------------------------------------------------------- #
@@ -61,7 +60,7 @@ class _FlakyAnchor:
         """Raise to simulate a BNB Testnet outage."""
         raise RuntimeError("rpc timeout")
 
-    async def verify(self, msg_id: str) -> None:  # noqa: ARG002
+    async def verify(self, msg_id: str) -> None:
         """Null verify."""
         return None
 

@@ -39,7 +39,6 @@ from agents.common.schemas.payloads import (
     TokenCandidate,
 )
 
-
 # --------------------------------------------------------------------------- #
 # Minimal in-memory fakes — enough to exercise BaseAgent.anchor_and_publish. #
 # --------------------------------------------------------------------------- #

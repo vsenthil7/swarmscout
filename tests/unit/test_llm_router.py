@@ -43,10 +43,10 @@ class _FakeProvider:
         self,
         *,
         model: str,
-        system: str | None,  # noqa: ARG002
-        messages: list[ChatMessage],  # noqa: ARG002
-        max_tokens: int,  # noqa: ARG002
-        temperature: float,  # noqa: ARG002
+        system: str | None,
+        messages: list[ChatMessage],
+        max_tokens: int,
+        temperature: float,
     ) -> LLMResponse:
         """Return a canned success response, or raise ProviderError up to ``raise_times``."""
         self._calls += 1

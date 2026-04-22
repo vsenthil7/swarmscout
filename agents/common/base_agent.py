@@ -34,7 +34,6 @@ from agents.common.logging_config import get_logger
 from agents.common.on_chain import NullAnchor, OnChainAnchor
 from agents.common.schemas.envelope import AgentName, Envelope, StreamName
 
-
 Anchor = OnChainAnchor | NullAnchor
 
 HEARTBEAT_INTERVAL_SECONDS = 10
@@ -141,7 +140,7 @@ class BaseAgent(ABC):
                 await self.handle(None)
                 self.metrics.events_processed.inc()
                 self._events_in_window += 1
-            except Exception:  # noqa: BLE001 — logged and counted; agent stays up
+            except Exception:
                 self.metrics.events_failed.inc()
                 self.log.exception("handle_failed")
             await asyncio.sleep(1)
@@ -168,7 +167,7 @@ class BaseAgent(ABC):
                 msg_id=env.msg_id, payload_hash_hex=env.payload_hash, agent=self.agent_name.value
             )
             await self.findings.record_onchain(env.msg_id, tx_hash, block)
-        except Exception:  # noqa: BLE001 — anchor failure must not block the pipeline
+        except Exception:
             self.log.exception("anchor_failed", msg_id=env.msg_id)
         await self.bus.publish(self.output_stream, env)
         # Fan out to Redis Pub/Sub mirror so WebSocket subscribers (api/routes/ws.py)
@@ -181,7 +180,7 @@ class BaseAgent(ABC):
                     "pubsub:briefs",
                     env.model_dump_json(),
                 )
-            except Exception:  # noqa: BLE001 — broadcast failure must not block persistence
+            except Exception:
                 self.log.exception("pubsub_publish_failed", msg_id=env.msg_id)
         self.log.info(
             "emitted",
@@ -215,6 +214,6 @@ class BaseAgent(ABC):
                     llm_error_rate=0.0,
                 )
                 self._events_in_window = 0
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.log.exception("heartbeat_failed")
             await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS)

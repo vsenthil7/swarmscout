@@ -18,13 +18,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Grep for "for demo purposes"
         run: |
+          # Exclude docs and meta-files where the phrase is referenced as a rule
+          # (the rule is NFR-382 itself). We scan code, infra, and scripts only.
           if grep -rniI \
               --exclude-dir=node_modules \
               --exclude-dir=.git \
+              --exclude-dir=.github \
+              --exclude-dir=docs \
               --exclude-dir=out \
               --exclude-dir=coverage \
+              --exclude=CONTRIBUTING.md \
+              --exclude=NEXT_PROMPT_FOR_DESKTOP.md \
+              --exclude=.pre-commit-config.yaml \
+              --exclude=pnpm-lock.yaml \
               "for demo purposes" . ; then
-            echo "::error::Forbidden phrase 'for demo purposes' found"
+            echo "::error::Forbidden phrase 'for demo purposes' found in code"
             exit 1
           fi
 

@@ -12,7 +12,7 @@ async def health(request: Request) -> dict[str, object]:
     """Return heartbeats for every known agent plus a top-level status."""
     try:
         hbs = await request.app.state.heartbeats.all()
-    except Exception as err:  # noqa: BLE001
+    except Exception as err:
         return {"status": "degraded", "error": str(err), "agents": []}
     all_online = all(h.get("status") == "online" for h in hbs) if hbs else False
     return {

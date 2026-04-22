@@ -31,28 +31,28 @@ class Finding:
 Rule = Callable[[SocialScore, ChainMetrics], list[Finding]]
 
 
-def rule_unverified_contract(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_unverified_contract(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Unverified contracts cannot be audited — high penalty."""
     if not c.contract_verified:
         return [Finding("unverified-contract", 25, "Contract source not verified on BscScan.")]
     return []
 
 
-def rule_honeypot_failed(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_honeypot_failed(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Honeypot check failure — catastrophic, scoring forced low elsewhere."""
     if not c.honeypot_check_passed:
         return [Finding("honeypot-suspected", 40, "Honeypot check did not pass.")]
     return []
 
 
-def rule_lp_not_locked(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_lp_not_locked(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """LP tokens not locked — rugpull risk."""
     if not c.lp_locked:
         return [Finding("lp-not-locked", 20, "Liquidity pool tokens are not locked.")]
     return []
 
 
-def rule_high_concentration(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_high_concentration(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Top-10 wallets hold >70% of supply."""
     if c.top10_concentration_pct > 70.0:
         return [
@@ -65,21 +65,21 @@ def rule_high_concentration(s: SocialScore, c: ChainMetrics) -> list[Finding]:  
     return []
 
 
-def rule_low_holder_count(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_low_holder_count(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Fewer than 20 holders."""
     if c.holder_count < 20:
         return [Finding("low-holder-count", 10, f"Only {c.holder_count} holders.")]
     return []
 
 
-def rule_liquidity_too_thin(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_liquidity_too_thin(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Liquidity below $1k."""
     if c.liquidity_usd < 1_000:
         return [Finding("liquidity-too-thin", 15, f"Liquidity only ${c.liquidity_usd:,.0f}.")]
     return []
 
 
-def rule_suspicious_velocity(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_suspicious_velocity(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Tx velocity >300/min suggests wash trading."""
     if c.buy_sell_velocity_tx_per_min > 300:
         return [
@@ -92,7 +92,7 @@ def rule_suspicious_velocity(s: SocialScore, c: ChainMetrics) -> list[Finding]: 
     return []
 
 
-def rule_creator_has_history(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_creator_has_history(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Creator has launched >10 tokens previously — serial-launcher penalty."""
     if c.creator_previous_tokens > 10:
         return [
@@ -105,28 +105,28 @@ def rule_creator_has_history(s: SocialScore, c: ChainMetrics) -> list[Finding]: 
     return []
 
 
-def rule_no_organic_buzz(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_no_organic_buzz(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """organic_score below 15."""
     if s.organic_score < 15:
         return [Finding("no-organic-buzz", 10, f"organic_score is only {s.organic_score}.")]
     return []
 
 
-def rule_negative_sentiment(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_negative_sentiment(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Aggregated sentiment below -0.4."""
     if s.sentiment < -0.4:
         return [Finding("negative-sentiment", 10, f"Sentiment is {s.sentiment:.2f}.")]
     return []
 
 
-def rule_bot_shilling(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_bot_shilling(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Social agent flagged copy-paste shilling."""
     if "copy-paste-shilling" in s.red_flags:
         return [Finding("copy-paste-shilling", 15, "Social agent flagged copy-paste shilling.")]
     return []
 
 
-def rule_paid_promotion(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_paid_promotion(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Social agent flagged paid promotion."""
     if "paid-promotion-disclosure" in s.red_flags:
         return [
@@ -135,7 +135,7 @@ def rule_paid_promotion(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # no
     return []
 
 
-def rule_whale_sniping(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_whale_sniping(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """>5 whale entries in first observation window."""
     if c.whale_entries > 5:
         return [
@@ -148,7 +148,7 @@ def rule_whale_sniping(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noq
     return []
 
 
-def rule_social_degraded(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_social_degraded(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Social data came back degraded — confidence penalty."""
     if s.data_quality.value == "degraded":
         return [
@@ -161,7 +161,7 @@ def rule_social_degraded(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # n
     return []
 
 
-def rule_chain_degraded(s: SocialScore, c: ChainMetrics) -> list[Finding]:  # noqa: ARG001
+def rule_chain_degraded(s: SocialScore, c: ChainMetrics) -> list[Finding]:
     """Chain data came back degraded — confidence penalty."""
     if c.data_quality.value == "degraded":
         return [

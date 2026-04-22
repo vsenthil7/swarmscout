@@ -55,7 +55,7 @@ class _FakeFindings:
             on_chain_block=100,
         )
 
-    async def list_briefs(self, *, limit: int = 50, offset: int = 0) -> list[_Row]:  # noqa: ARG002
+    async def list_briefs(self, *, limit: int = 50, offset: int = 0) -> list[_Row]:
         """Return the single baked row regardless of pagination args."""
         return [self.row]
 
@@ -82,7 +82,7 @@ class _FakeHeartbeats:
 
 class _FakeAnchor:
     """In-memory stand-in for the on-chain anchor — ``verify()`` always None."""
-    async def verify(self, msg_id: str) -> None:  # noqa: ARG002
+    async def verify(self, msg_id: str) -> None:
         """Always return None — no records in the fake anchor."""
         return None
 

@@ -78,14 +78,14 @@ class XScraper:
             for a in articles[:20]:
                 try:
                     text = await a.inner_text(timeout=1_500)
-                except Exception:  # noqa: BLE001
+                except Exception:
                     continue
                 if text.strip():
                     snippets.append(text.strip()[:280])
             if not snippets:
                 return ScrapeResult(degraded=True)
             return ScrapeResult(mention_count=len(snippets), sample_snippets=snippets)
-        except Exception as err:  # noqa: BLE001
+        except Exception as err:
             log.warning("x_scrape_failed", query=query, err=str(err))
             return ScrapeResult(degraded=True)
         finally:

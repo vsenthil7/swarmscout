@@ -73,7 +73,7 @@ class NarratorAgent(BaseAgent):
                 await self.bus.ack(StreamName.RISK, NARRATOR_GROUP, msg.entry_id)
                 self.metrics.events_processed.inc()
                 self._events_in_window += 1
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.metrics.events_failed.inc()
                 self.log.exception("narrator_process_failed", entry_id=msg.entry_id)
 
@@ -101,7 +101,7 @@ class NarratorAgent(BaseAgent):
                     agent=self.agent_name.value,
                 )
                 await self.findings.record_onchain(review_env.msg_id, tx, block)
-            except Exception:  # noqa: BLE001
+            except Exception:
                 self.log.exception("anchor_failed_review", msg_id=review_env.msg_id)
             await self.bus.publish(StreamName.HUMAN_REVIEW, review_env)
             return

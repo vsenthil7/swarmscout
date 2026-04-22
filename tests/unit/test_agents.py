@@ -5,12 +5,11 @@ from __future__ import annotations
 import pytest
 
 from agents.chain.main import _velocity_tx_per_min, _whale_count
+from agents.common.schemas.payloads import ConvictionTier
 from agents.hunter.sources.polling import FourMemePollingSource
 from agents.hunter.sources.rpc_log import FourMemeRPCLogSource
 from agents.narrator.main import _derive_conviction, _extract_token_name, _parse_json
 from agents.social.main import _strip_fences
-from agents.common.schemas.payloads import ConvictionTier
-
 
 # --------------------------------------------------------------------------- #
 # Hunter polling source TC-U50-53                                             #

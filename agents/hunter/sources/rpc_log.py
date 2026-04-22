@@ -72,7 +72,7 @@ class FourMemeRPCLogSource:
                         "topics": [self._topic],
                     }
                 )
-            except Exception as err:  # noqa: BLE001
+            except Exception as err:
                 log.warning("rpc_log_get_logs_failed", err=str(err))
                 await asyncio.sleep(self._interval)
                 continue
@@ -90,7 +90,7 @@ class FourMemeRPCLogSource:
         """Decode a log entry; returns ``None`` on malformed entries."""
         try:
             topics = entry.get("topics", [])
-            data = entry.get("data", "")
+            _data = entry.get("data", "")  # reserved for future decoding of non-indexed fields
             if not isinstance(topics, list) or len(topics) < 3:
                 return None
             token_addr = "0x" + bytes(topics[1]).hex()[-40:] if isinstance(topics[1], (bytes, bytearray)) else str(topics[1])[-40:]

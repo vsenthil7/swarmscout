@@ -130,8 +130,15 @@ select = [
     "S",             # bandit
 ]
 ignore = [
-    "S101",  # assert (used in tests)
-    "S311",  # pseudo-random ok for non-crypto
+    "S101",      # assert (used in tests)
+    "S311",      # pseudo-random ok for non-crypto
+    "E501",      # line-too-long — fmt takes care of most; long log lines accepted
+    "UP042",     # replace str-enum: Pydantic v2 + str Enum is the idiomatic pattern
+    "ASYNC109",  # async-function-with-timeout: explicit timeouts are a feature
+    "S106",      # hardcoded-password-func-arg: all occurrences are test fixtures
+    "S112",      # try-except-continue: intentional graceful-degradation pattern
+    "SIM105",    # suppressible-exception: try/except/pass is often clearer
+    "SIM108",    # if-else-block-instead-of-if-exp: readability preference
 ]
 
 [tool.ruff.lint.per-file-ignores]
