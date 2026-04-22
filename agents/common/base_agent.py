@@ -39,37 +39,46 @@ Anchor = OnChainAnchor | NullAnchor
 
 HEARTBEAT_INTERVAL_SECONDS = 10
 
+# Module-level metrics: Prometheus forbids re-registration in the same
+# registry. Defining the collectors once at import time and then binding
+# the ``agent`` label at construction is the canonical pattern, and it is
+# test-safe because importing the module twice does not re-run class body.
+_EVENTS_PROCESSED = Counter(
+    "swarmscout_events_processed_total",
+    "Events successfully processed by agent.",
+    ["agent"],
+)
+_EVENTS_FAILED = Counter(
+    "swarmscout_events_failed_total",
+    "Events that failed processing.",
+    ["agent"],
+)
+_PROCESSING_SECONDS = Histogram(
+    "swarmscout_processing_seconds",
+    "Time spent handling one message.",
+    ["agent"],
+)
+_PENDING_DEPTH = Gauge(
+    "swarmscout_pending_depth",
+    "Depth of pending-entries list per input stream.",
+    ["agent", "stream"],
+)
+
 
 class AgentMetrics:
     """Prometheus metric bundle, one instance per agent."""
 
     def __init__(self, agent: str) -> None:
-        """Initialise the metric bundle with fixed labels.
+        """Bind the agent label to the module-level collectors.
 
-        Each metric is created with ``.labels(agent=agent)`` so the label
-        is stamped in once and does not need to be re-passed at every
-        increment call site.
+        The collectors are registered exactly once at module import. Multiple
+        ``AgentMetrics`` instances in the same process (tests, in-process
+        co-location) share the same underlying collectors and cannot collide.
         """
-        self.events_processed = Counter(
-            "swarmscout_events_processed_total",
-            "Events successfully processed by agent.",
-            ["agent"],
-        ).labels(agent=agent)
-        self.events_failed = Counter(
-            "swarmscout_events_failed_total",
-            "Events that failed processing.",
-            ["agent"],
-        ).labels(agent=agent)
-        self.processing_seconds = Histogram(
-            "swarmscout_processing_seconds",
-            "Time spent handling one message.",
-            ["agent"],
-        ).labels(agent=agent)
-        self.pending_depth = Gauge(
-            "swarmscout_pending_depth",
-            "Depth of pending-entries list per input stream.",
-            ["agent", "stream"],
-        )
+        self.events_processed = _EVENTS_PROCESSED.labels(agent=agent)
+        self.events_failed = _EVENTS_FAILED.labels(agent=agent)
+        self.processing_seconds = _PROCESSING_SECONDS.labels(agent=agent)
+        self.pending_depth = _PENDING_DEPTH
 
 
 class BaseAgent(ABC):
