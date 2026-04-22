@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Any
 
@@ -91,6 +92,7 @@ def client() -> TestClient:
     """FastAPI TestClient with ``app.state`` populated via a fake lifespan."""
     app = create_app()
 
+    @asynccontextmanager
     async def fake_lifespan(_app):  # type: ignore[no-untyped-def]
         """Replacement lifespan that wires fake state instead of real dependencies."""
         _app.state.redis = fakeredis.aioredis.FakeRedis(decode_responses=True)
@@ -99,9 +101,12 @@ def client() -> TestClient:
         _app.state.anchor = _FakeAnchor()
         yield
 
-    # Bypass real lifespan — inject fakes directly.
+    # Starlette 1.x stores the lifespan callable on the router at construction
+    # time. Overwriting it is the correct hook, but must wrap in
+    # asynccontextmanager so TestClient's context-manager entry triggers setup.
     app.router.lifespan_context = fake_lifespan
-    return TestClient(app)
+    with TestClient(app) as c:
+        yield c
 
 
 # TC-I05 — list briefs works
