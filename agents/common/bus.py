@@ -131,8 +131,8 @@ class Bus:
             if not resp:
                 await asyncio.sleep(0)
                 continue
-            for _stream, entries in resp:
-                for entry_id, fields in entries:
+            for _stream, entries in resp:  # pragma: no branch - single-stream response
+                for entry_id, fields in entries:  # pragma: no branch - caller breaks early
                     yield BusMessage(stream=name, entry_id=entry_id, envelope=_decode(fields))
 
     async def ack(self, stream: StreamName | str, group: str, entry_id: str) -> None:
