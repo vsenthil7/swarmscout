@@ -81,12 +81,7 @@ addopts = [
     "--cov-branch",
     "--cov-report=term-missing",
     "--cov-report=xml",
-    "--cov-fail-under=55",
-    # Coverage gate temporarily relaxed from 100 to 55 for hackathon submission.
-    # Uncovered paths are the agent main loops, bot command handlers, telegram
-    # scrapers, and WebSocket route handler. These are integration-heavy and
-    # are exercised at runtime by docker-compose + manual smoke test. The
-    # 100% target is restored as a post-submission task — see TRACEABILITY.md.
+    "--cov-fail-under=100",
 ]
 markers = [
     "integration: requires live Redis/Postgres via testcontainers",
@@ -112,7 +107,7 @@ exclude_lines = [
 ]
 show_missing = true
 skip_covered = false
-fail_under = 55
+fail_under = 100
 
 [tool.ruff]
 line-length = 100
