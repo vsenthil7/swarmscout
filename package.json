@@ -1,0 +1,20 @@
+{
+  "name": "swarmscout",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Decentralised agent swarm for Four.meme alpha discovery",
+  "scripts": {
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
