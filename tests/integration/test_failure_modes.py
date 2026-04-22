@@ -247,17 +247,6 @@ async def test_tcf04_risk_join_timeout_emits_partial_verdict(monkeypatch: pytest
     captured: list[Envelope] = []
 
     # Build a RiskAgent with minimal dependencies and hand-drive the pair logic.
-    class _Ctx:
-        class _S:
-            risk_primary_model = "anthropic/claude-opus-4-7"
-
-        settings = _S()
-        bus = None  # set below
-        router = None  # unused — partial-emit path does not call the LLM
-
-    ctx = _Ctx()
-    ctx.bus = bus  # type: ignore[attr-defined]
-
     class _CapturingFindings:
         async def insert_envelope(self, env: Envelope) -> None:
             captured.append(env)
@@ -265,10 +254,21 @@ async def test_tcf04_risk_join_timeout_emits_partial_verdict(monkeypatch: pytest
         async def record_onchain(self, *_: Any) -> None:
             return None
 
+    class _Ctx:
+        class _S:
+            risk_primary_model = "anthropic/claude-opus-4-7"
+
+        settings = _S()
+        bus = None  # set below
+        router = None  # unused — partial-emit path does not call the LLM
+        findings = _CapturingFindings()
+        heartbeats = _NopHeartbeat()
+        anchor = NullAnchor()
+
+    ctx = _Ctx()
+    ctx.bus = bus  # type: ignore[attr-defined]
+
     agent = risk_main.RiskAgent(ctx=ctx)  # type: ignore[arg-type]
-    agent.findings = _CapturingFindings()  # type: ignore[assignment]
-    agent.heartbeats = _NopHeartbeat()  # type: ignore[assignment]
-    agent.anchor = NullAnchor()
 
     # Seed a single-side social envelope; no chain partner will arrive.
     from agents.common.schemas.payloads import DataQuality, SocialScore
