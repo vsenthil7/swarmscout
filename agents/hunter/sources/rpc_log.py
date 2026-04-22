@@ -12,8 +12,7 @@ import asyncio
 from collections.abc import AsyncIterator
 
 import redis.asyncio as aioredis
-from web3 import AsyncWeb3
-from web3.providers.async_rpc import AsyncHTTPProvider
+from web3 import AsyncHTTPProvider, AsyncWeb3
 
 from agents.common.logging_config import get_logger
 from agents.hunter.sources.base import RawTokenEvent

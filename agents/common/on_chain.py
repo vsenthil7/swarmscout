@@ -15,8 +15,7 @@ from dataclasses import dataclass
 from typing import Any, cast
 
 from eth_account import Account
-from web3 import AsyncWeb3, Web3
-from web3.providers.async_rpc import AsyncHTTPProvider
+from web3 import AsyncHTTPProvider, AsyncWeb3, Web3
 
 FINDINGS_REGISTRY_ABI: list[dict[str, Any]] = [
     {
