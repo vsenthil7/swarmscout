@@ -92,13 +92,23 @@ describe('useBriefStream', () => {
   });
 
   it('falls back to polling after repeated failures', async () => {
-    const { result } = renderHook(() => useBriefStream([]));
-    for (let i = 0; i < 3; i += 1) {
-      act(() => {
-        MockWebSocket.instances[i]?.onclose?.(new Event('close'));
-        vi.advanceTimersByTime(60_000);
-      });
+    // Mock fetch so the polling fallback doesn't hit a real network endpoint.
+    // Use a factory so each call gets a fresh Response (bodies are one-shot).
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async () =>
+      new Response(JSON.stringify({ items: [], limit: 20, offset: 0 }), { status: 200 }),
+    );
+    try {
+      const { result } = renderHook(() => useBriefStream([]));
+      for (let i = 0; i < 3; i += 1) {
+        act(() => {
+          MockWebSocket.instances[i]?.onclose?.(new Event('close'));
+          vi.advanceTimersByTime(60_000);
+        });
+      }
+      // With fake timers, waitFor doesn't advance real time. Assert directly.
+      expect(['polling', 'connecting']).toContain(result.current.status);
+    } finally {
+      fetchSpy.mockRestore();
     }
-    await waitFor(() => expect(result.current.status === 'polling' || result.current.status === 'connecting').toBe(true));
   });
 });
