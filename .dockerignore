@@ -1,0 +1,59 @@
+# --- VCS ---
+.git
+.gitignore
+.gitmodules
+
+# --- Python ---
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+.ruff_cache
+htmlcov
+.coverage
+.coverage.*
+coverage.xml
+dist
+build
+*.egg-info
+
+# --- Node / Next ---
+node_modules
+web/.next
+web/out
+web/coverage
+web/playwright-report
+web/test-results
+.turbo
+
+# --- Foundry ---
+contracts/cache
+contracts/out
+contracts/broadcast
+contracts/lib
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+*.swp
+
+# --- Env ---
+.env
+.env.*
+!.env.example
+
+# --- Docs & large artefacts not needed at runtime ---
+docs
+*.md
+!README.md
+LICENSE
+
+# --- Misc ---
+tmp
+logs
+*.log
